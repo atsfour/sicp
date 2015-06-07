@@ -1,7 +1,7 @@
-(define (abx x)
+(define (abs x)
     if (< x 0) (- x) x)
 
-(define (square x) (* x x))
+(define (Pquare x) (* x x))
 
 (define (new-if pred then-clause else-clause)
     (cond (pred then-clause)
