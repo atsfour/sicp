@@ -23,8 +23,8 @@
 
 ; Exercise 2.18
 (define (reverse x)
-  (define (reverse-iter acc x)
-    (if (null? x)
-        acc
-        (reverse-iter (cons (car x) acc) (cdr x))))
-  (reverse-iter `() x))
+  (if (null? x)
+      ()
+      (append (reverse (cdr x)) (list (car x)))))
+
+(define sample (list 1 2 3))
