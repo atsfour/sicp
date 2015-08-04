@@ -50,6 +50,22 @@
   (let ((cols (transpose m2)))
     (map (lambda (x) (matrix-*-vector cols x)) m1)))
 
+;Exercise 2.38
+
+(define (fold-left op initial sequence)
+  (define (iter result rest)
+    (if (null? rest)
+        result
+        (iter (op result (car rest))
+              (cdr rest))))
+  (iter initial sequence))
+
+;Exercise 2.39
+(define (reverse1 sequence)
+  (fold-left (lambda (x y) (append x (list y))) () sequence))
+(define (reverse2 sequence)
+  (accumulate (lambda (x y) (append y (list x))) () sequence))
+
 (define sample-list1 (list 1 2 3 4 5))
 (define vector1 (list 1 2 3))
 (define vector2 (list 4 5 6))
