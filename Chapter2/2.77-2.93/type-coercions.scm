@@ -7,17 +7,17 @@
               '(real . 3)
               '(complex . 4)))
 
-(define (highest-type type-list)
-  (define (highest-type-iter l height type)
-    (if (null? l)
+(define (highest-type args)
+  (define (highest-type-iter args height type)
+    (if (null? args)
         type
-        (let ((this-type (car l))
-              (this-height
-                (hash-table-get type-hyerarchy-table (car l) 0)))
-          (if (> this-height height)
-              (highest-type-iter (cdr l) this-height this-type)
-              (highest-type-iter (cdr l) height type)))))
-  (highest-type-iter type-list 0 'null))
+        (let ((this-type (type-tag (car args))))
+          (let ((this-height
+                  (hash-table-get type-hyerarchy-table this-type 0)))
+            (if (> this-height height)
+                (highest-type-iter (cdr args) this-height this-type)
+                (highest-type-iter (cdr args) height type))))))
+  (highest-type-iter args 0 'miss))
 
 (define (raise-to obj type)
   (if (equal? (type-tag obj) type)
@@ -30,3 +30,6 @@
                              (type-tag (car list)))
          (can-coerce? (cdr list)))
         (else #f)))
+
+(define (can-raise? x)
+  (get 'raise (type-tag x)))

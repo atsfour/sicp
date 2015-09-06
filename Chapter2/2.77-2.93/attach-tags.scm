@@ -6,7 +6,7 @@
 (define (type-tag datum)
   (if (pair? datum)
       (car datum)
-      'scheme-number))
+      'integer))
 (define (contents datum)
   (if (pair? datum)
       (cdr datum)
