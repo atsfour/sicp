@@ -27,7 +27,10 @@
         (error "Polys not in same var: mul-poly"
                (list p1 p2))))
   (define (minus-poly p)
-    (make-poly (variable p) (map coeff (term-list p))))
+    (make-poly (variable p)
+               (map (lambda (t) (make-term (order t)
+                                           (minus (coeff t))))
+                    (term-list p))))
   
   (define (add-terms L1 L2)
     (cond ((empty-termlist? L1) L2)
@@ -47,17 +50,12 @@
                                    (add (coeff t1) (coeff t2)))
                         (add-terms (rest-terms L1)
                                    (rest-terms L2)))))))))
+
   (define (mul-terms L1 L2)
     (if (empty-termlist? L1)
         (the-empty-termlist)
         (add-terms (mul-term-by-all-terms (first-term L1) L2)
                    (mul-terms (rest-terms L1) L2))))
-  (define (minus-terms L)
-    (if (empty-termlist? L)
-        (the-empty-termlist)
-        (adjoin-term (make-term (order (first-term L)) 
-                                (minus (coeff (first-term L))))
-                     (rest-terms L))))
   (define (mul-term-by-all-terms t1 L)
     (if (empty-termlist? L)
         (the-empty-termlist)
@@ -68,6 +66,7 @@
             (mul-term-by-all-terms t1 (rest-terms L))))))
   
   (define (adjoin-term term term-list)
+    (print "adjoin-term" term term-list (=zero? (coeff term)) (cons term term-list))
     (if (=zero? (coeff term))
         term-list
         (cons term term-list)))
@@ -81,7 +80,7 @@
   (define (order term) (car term))
   (define (coeff term) (cadr term))
   
-  (define (=zero? p) empty-termlist?)
+  (define (poly=zero? p) empty-termlist?)
   
   (define (tag p) (attach-tag 'polynomial p))
   (put 'add '(polynomial polynomial)
@@ -95,7 +94,7 @@
   (put 'make 'polynomial
        (lambda (var terms)
          (tag (make-poly var terms))))
-  (put '=zero? '(polynomial) =zero?)
+  (put '=zero? '(polynomial) poly=zero?)
   'done)
 
 (define (make-polynomial var terms)
