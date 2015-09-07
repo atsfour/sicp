@@ -16,6 +16,9 @@
                               (term-list p2)))
         (error "Polys not in same var: add-poly"
                (list p1 p2))))
+  (define (sub-poly p1 p2)
+    (add-poly p1 (minus-poly p2)))
+  
   (define (mul-poly p1 p2)
     (if (same-variable? (variable p1) (variable p2))
         (make-poly (variable p1)
@@ -23,6 +26,8 @@
                               (term-list p2)))
         (error "Polys not in same var: mul-poly"
                (list p1 p2))))
+  (define (minus-poly p)
+    (make-poly (variable p) (map coeff (term-list p))))
   
   (define (add-terms L1 L2)
     (cond ((empty-termlist? L1) L2)
@@ -47,6 +52,12 @@
         (the-empty-termlist)
         (add-terms (mul-term-by-all-terms (first-term L1) L2)
                    (mul-terms (rest-terms L1) L2))))
+  (define (minus-terms L)
+    (if (empty-termlist? L)
+        (the-empty-termlist)
+        (adjoin-term (make-term (order (first-term L)) 
+                                (minus (coeff (first-term L))))
+                     (rest-terms L))))
   (define (mul-term-by-all-terms t1 L)
     (if (empty-termlist? L)
         (the-empty-termlist)
@@ -77,6 +88,10 @@
        (lambda (p1 p2) (tag (add-poly p1 p2))))
   (put 'mul '(polynomial polynomial)
        (lambda (p1 p2) (tag (mul-poly p1 p2))))
+  (put 'sub '(polynomial polynomial)
+       (lambda (p1 p2) (tag (sub-poly p1 p2))))
+  (put 'minus '(polynomial)
+       (lambda (p) (tag (minus-poly p))))
   (put 'make 'polynomial
        (lambda (var terms)
          (tag (make-poly var terms))))
