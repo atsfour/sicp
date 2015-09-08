@@ -116,7 +116,14 @@
   (define (order term) (car term))
   (define (coeff term) (cadr term))
   
-  (define (poly=zero? p) empty-termlist?)
+  (define (poly=zero? p)
+    (define (term-list=zero? term-list)
+      (print "try" term-list)
+      (cond ((empty-termlist? term-list) #t)
+            ((=zero? (coeff (first-term term-list))) 
+             (term-list=zero? (cdr term-list)))
+            (else #f)))
+    (term-list=zero? (term-list p)))
   
   (define (tag p) (attach-tag 'polynomial p))
   (put 'add '(polynomial polynomial)
