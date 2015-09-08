@@ -1,3 +1,36 @@
+(define (install-dence-polynomial-package)
+  
+  (define (adjoin-term term term-list)
+    (if (=zero? (coeff term))
+        term-list
+        (cons term term-list)))
+  
+  (define (the-empty-termlist) '())
+  (define (first-term term-list) (car term-list))
+  (define (rest-terms term-list) (cdr term-list))
+  (define (empty-termlist? term-list) (null? term-list))
+  
+  (define (make-term order coeff) (list order coeff))
+  (define (order term) (car term))
+  (define (coeff term) (cadr term))
+  )
+
+(define (install-sparce-polynomial-package)
+  (define (adjoin-term term term-list)
+    (if (=zero? (coeff term))
+        term-list
+        (cons term term-list)))
+  
+  (define (the-empty-termlist) '())
+  (define (first-term term-list) (car term-list))
+  (define (rest-terms term-list) (cdr term-list))
+  (define (empty-termlist? term-list) (null? term-list))
+  
+  (define (make-term order coeff) (list order coeff))
+  (define (order term) (car term))
+  (define (coeff term) (cadr term))
+  )
+
 (define (install-polynomial-package)
   
   (define (make-poly variable term-list)
@@ -50,7 +83,7 @@
                                    (add (coeff t1) (coeff t2)))
                         (add-terms (rest-terms L1)
                                    (rest-terms L2)))))))))
-
+  
   (define (mul-terms L1 L2)
     (if (empty-termlist? L1)
         (the-empty-termlist)
@@ -66,13 +99,10 @@
             (mul-term-by-all-terms t1 (rest-terms L))))))
   
   (define (adjoin-term term term-list)
-    (print "adjoin-term" term term-list (=zero? (coeff term)) (cons term term-list))
-    (if (=zero? (coeff term))
-        term-list
-        (cons term term-list)))
+        (cons (coeff term) term-list))
   
   (define (the-empty-termlist) '())
-  (define (first-term term-list) (car term-list))
+  (define (first-term term-list) (list (- (length term-list) 1) (car term-list)))
   (define (rest-terms term-list) (cdr term-list))
   (define (empty-termlist? term-list) (null? term-list))
   
