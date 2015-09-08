@@ -15,7 +15,7 @@
        (lambda (x) (= x 0)))
   (put 'raise 'integer
        (lambda (x) (make-rational x 1)))
-  (put 'make 'integer (lambda (x) (tag x)))
+  (put 'make 'integer identity)
   '(done integer))
 
 (define (make-integer x)
