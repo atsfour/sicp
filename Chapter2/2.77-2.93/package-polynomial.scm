@@ -99,7 +99,13 @@
             (mul-term-by-all-terms t1 (rest-terms L))))))
   
   (define (adjoin-term term term-list)
-        (cons (coeff term) term-list))
+    (define (convert-nth n obj list)
+      (if (= n 0)
+          (cons obj (cdr list))
+          (cons (car list) (convert-nth (- n 1) obj (cdr list)))))
+    (if (null? term-list)
+        (cons (coeff term) (make-list (order term) 0))
+        (cons (coeff term) term-list)))
   
   (define (the-empty-termlist) '())
   (define (first-term term-list) (list (- (length term-list) 1) (car term-list)))
