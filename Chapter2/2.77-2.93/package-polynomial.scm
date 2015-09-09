@@ -125,14 +125,16 @@
               (let ((new-c (div (coeff t1) (coeff t2)))
                     (new-o (- (order t1) (order t2))))
                 (let ((rest-of-result
-                      (add-terms
-                        L1
-                        (minus-terms 
-                          (mul-term-by-all-terms 
-                            (make-term new-o new-c) 
-                            L2)))))
-                  (adjoin-term (make-term new-o new-c)
-                               (div-terms rest-of-result L2))))))))
+                        (add-terms
+                          L1
+                          (minus-terms 
+                            (mul-term-by-all-terms 
+                              (make-term new-o new-c) 
+                              L2)))))
+                  (let ((result (div-terms rest-of-result L2)))
+                    (list (adjoin-term (make-term new-o new-c)
+                                       (car result))
+                          (cadr result)))))))))
   
   (define (adjoin-term term term-list)
     (if (=zero? (coeff term))
@@ -198,8 +200,8 @@
         (let ((result-term-lists 
                 (div-terms (term-list p1) (term-list p2))))
           (print "result-term-lists" result-term-lists)
-          (cons (make-poly (variable p1) (car result-term-lists))
-                (make-poly (variable p1) (cadr result-term-lists))))
+          (map (lambda (tl) (make-poly (variable p1) tl))
+               result-term-lists))
         (error "Polys not in same var: div-poly"
                (list p1 p2))))
   
@@ -236,7 +238,7 @@
   (put 'sub '(polynomial polynomial)
        (lambda (p1 p2) (tag (sub-poly p1 p2))))
   (put 'div '(polynomial polynomial)
-       (lambda (p1 p2) (tag (div-poly p1 p2))))
+       (lambda (p1 p2) (map tag (div-poly p1 p2))))
   (put 'minus '(polynomial)
        (lambda (p) (tag (minus-poly p))))
   (put 'make-poly-dence 'polynomial
