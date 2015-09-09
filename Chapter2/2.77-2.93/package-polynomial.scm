@@ -115,6 +115,25 @@
                        (mul (coeff t1) (coeff t2)))
             (mul-term-by-all-terms t1 (rest-terms L))))))
   
+  (define (div-terms L1 L2)
+    (if (empty-termlist? L1)
+        (list (the-empty-termlist) (the-empty-termlist))
+        (let ((t1 (first-term L1))
+              (t2 (first-term L2)))
+          (if (> (order t2) (order t1))
+              (list (the-empty-termlist) L1)
+              (let ((new-c (div (coeff t1) (coeff t2)))
+                    (new-o (- (order t1) (order t2))))
+                (let ((rest-of-result
+                      (add-terms
+                        L1
+                        (minus-terms 
+                          (mul-term-by-all-terms 
+                            (make-term new-o new-c) 
+                            L2)))))
+                  (adjoin-term (make-term new-o new-c)
+                               (div-terms rest-of-result L2))))))))
+  
   (define (adjoin-term term term-list)
     (if (=zero? (coeff term))
         term-list
@@ -134,6 +153,8 @@
        (lambda (L1 L2) (tag (add-terms L1 L2))))
   (put 'mul-terms '(sparce sparce) 
        (lambda (L1 L2) (tag (mul-terms L1 L2))))
+  (put 'div-terms '(sparce sparce) 
+       (lambda (L1 L2) (map tag (div-terms L1 L2))))
   (put 'minus-terms '(sparce)
        (lambda (term-list) (tag (minus-terms term-list))))
   '(done sparce poly))
@@ -171,6 +192,17 @@
                               (term-list p2)))
         (error "Polys not in same var: mul-poly"
                (list p1 p2))))
+  
+  (define (div-poly p1 p2)
+    (if (same-variable? (variable p1) (variable p2))
+        (let ((result-term-lists 
+                (div-terms (term-list p1) (term-list p2))))
+          (print "result-term-lists" result-term-lists)
+          (cons (make-poly (variable p1) (car result-term-lists))
+                (make-poly (variable p1) (cadr result-term-lists))))
+        (error "Polys not in same var: div-poly"
+               (list p1 p2))))
+  
   (define (minus-poly p)
     (make-poly (variable p)
                (minus-terms (term-list p))))
@@ -183,6 +215,9 @@
   
   (define (mul-terms L1 L2)
     (apply-generic 'mul-terms L1 L2))
+  
+  (define (div-terms L1 L2)
+    (apply-generic 'div-terms L1 L2))
   
   (define (poly=zero? p)
     (define (term-list=zero? term-list)
@@ -200,6 +235,8 @@
        (lambda (p1 p2) (tag (mul-poly p1 p2))))
   (put 'sub '(polynomial polynomial)
        (lambda (p1 p2) (tag (sub-poly p1 p2))))
+  (put 'div '(polynomial polynomial)
+       (lambda (p1 p2) (tag (div-poly p1 p2))))
   (put 'minus '(polynomial)
        (lambda (p) (tag (minus-poly p))))
   (put 'make-poly-dence 'polynomial
