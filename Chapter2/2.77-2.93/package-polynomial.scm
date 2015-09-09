@@ -1,6 +1,6 @@
 (define (install-dence-polynomial-package)
   
-  (define (add-terms L1 L2)
+  (define (add-dence-terms L1 L2)
     (cond ((empty-termlist? L1) L2)
           ((empty-termlist? L2) L1)
           (else
@@ -8,24 +8,24 @@
                   (t2 (first-term L2)))
               (cond ((> (order t1) (order t2))
                      (adjoin-term
-                       t1 (add-terms (rest-terms L1) L2)))
+                       t1 (add-dence-terms (rest-terms L1) L2)))
                     ((< (order t1) (order t2))
                      (adjoin-term
-                       t2 (add-terms L1 (rest-terms L2))))
+                       t2 (add-dence-terms L1 (rest-terms L2))))
                     (else
                       (adjoin-term
                         (make-term (order t1)
                                    (add (coeff t1) (coeff t2)))
-                        (add-terms (rest-terms L1)
-                                   (rest-terms L2)))))))))
-  (define (minus-terms L)
+                        (add-dence-terms (rest-terms L1)
+                                         (rest-terms L2)))))))))
+  (define (minus-dence-terms L)
     (map (lambda (x) (- x)) L))
   
-  (define (mul-terms L1 L2)
+  (define (mul-dence-terms L1 L2)
     (if (empty-termlist? L1)
         (the-empty-termlist)
-        (add-terms (mul-term-by-all-terms (first-term L1) L2)
-                   (mul-terms (rest-terms L1) L2))))
+        (add-dence-terms (mul-term-by-all-terms (first-term L1) L2)
+                         (mul-dence-terms (rest-terms L1) L2))))
   (define (mul-term-by-all-terms t1 L)
     (if (empty-termlist? L)
         (the-empty-termlist)
@@ -64,11 +64,11 @@
   
   (define (tag x) (attach-tag 'dence x))
   (put 'add-terms '(dence dence) 
-       (lambda (L1 L2) (tag (add-terms L1 L2))))
+       (lambda (L1 L2) (tag (add-dence-terms L1 L2))))
   (put 'mul-terms '(dence dence) 
-       (lambda (L1 L2) (tag (mul-terms L1 L2))))
+       (lambda (L1 L2) (tag (mul-dence-terms L1 L2))))
   (put 'minus-terms '(dence)
-       (lambda (term-list) (tag (minus-terms term-list))))
+       (lambda (term-list) (tag (minus-dence-terms term-list))))
   (put 'raise 'dence
        (lambda (term-list)
          (attach-tag 'sparce (dence->sparce term-list))))
@@ -79,7 +79,7 @@
   (define (make-poly-sparce variable term-list)
     (cons variable term-list))
   
-  (define (add-terms L1 L2)
+  (define (add-sparce-terms L1 L2)
     (cond ((empty-termlist? L1) L2)
           ((empty-termlist? L2) L1)
           (else
@@ -87,25 +87,25 @@
                   (t2 (first-term L2)))
               (cond ((> (order t1) (order t2))
                      (adjoin-term
-                       t1 (add-terms (rest-terms L1) L2)))
+                       t1 (add-sparce-terms (rest-terms L1) L2)))
                     ((< (order t1) (order t2))
                      (adjoin-term
-                       t2 (add-terms L1 (rest-terms L2))))
+                       t2 (add-sparce-terms L1 (rest-terms L2))))
                     (else
                       (adjoin-term
                         (make-term (order t1)
                                    (add (coeff t1) (coeff t2)))
-                        (add-terms (rest-terms L1)
-                                   (rest-terms L2)))))))))
-  (define (minus-terms L)
+                        (add-sparce-terms (rest-terms L1)
+                                          (rest-terms L2)))))))))
+  (define (minus-sparce-terms L)
     (map (lambda (t) (make-term (order t) (- (coeff t)))) 
          L))
   
-  (define (mul-terms L1 L2)
+  (define (mul-sparce-terms L1 L2)
     (if (empty-termlist? L1)
         (the-empty-termlist)
-        (add-terms (mul-term-by-all-terms (first-term L1) L2)
-                   (mul-terms (rest-terms L1) L2))))
+        (add-sparce-terms (mul-term-by-all-terms (first-term L1) L2)
+                          (mul-sparce-terms (rest-terms L1) L2))))
   (define (mul-term-by-all-terms t1 L)
     (if (empty-termlist? L)
         (the-empty-termlist)
@@ -115,7 +115,7 @@
                        (mul (coeff t1) (coeff t2)))
             (mul-term-by-all-terms t1 (rest-terms L))))))
   
-  (define (div-terms L1 L2)
+  (define (div-sparce-terms L1 L2)
     (if (empty-termlist? L1)
         (list (the-empty-termlist) (the-empty-termlist))
         (let ((t1 (first-term L1))
@@ -125,13 +125,13 @@
               (let ((new-c (div (coeff t1) (coeff t2)))
                     (new-o (- (order t1) (order t2))))
                 (let ((rest-of-result
-                        (add-terms
+                        (add-sparce-terms
                           L1
-                          (minus-terms 
+                          (minus-sparce-terms 
                             (mul-term-by-all-terms 
                               (make-term new-o new-c) 
                               L2)))))
-                  (let ((result (div-terms rest-of-result L2)))
+                  (let ((result (div-sparce-terms rest-of-result L2)))
                     (list (adjoin-term (make-term new-o new-c)
                                        (car result))
                           (cadr result)))))))))
@@ -152,13 +152,13 @@
   
   (define (tag x) (attach-tag 'sparce x))
   (put 'add-terms '(sparce sparce) 
-       (lambda (L1 L2) (tag (add-terms L1 L2))))
+       (lambda (L1 L2) (tag (add-sparce-terms L1 L2))))
   (put 'mul-terms '(sparce sparce) 
-       (lambda (L1 L2) (tag (mul-terms L1 L2))))
+       (lambda (L1 L2) (tag (mul-sparce-terms L1 L2))))
   (put 'div-terms '(sparce sparce) 
-       (lambda (L1 L2) (map tag (div-terms L1 L2))))
+       (lambda (L1 L2) (map tag (div-sparce-terms L1 L2))))
   (put 'minus-terms '(sparce)
-       (lambda (term-list) (tag (minus-terms term-list))))
+       (lambda (term-list) (tag (minus-sparce-terms term-list))))
   '(done sparce poly))
 
 
