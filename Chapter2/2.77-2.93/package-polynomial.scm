@@ -18,6 +18,8 @@
                                    (add (coeff t1) (coeff t2)))
                         (add-terms (rest-terms L1)
                                    (rest-terms L2)))))))))
+  (define (minus-terms L)
+    (map (lambda (x) (- x)) L))
   
   (define (mul-terms L1 L2)
     (if (empty-termlist? L1)
@@ -65,10 +67,13 @@
        (lambda (L1 L2) (tag (add-terms L1 L2))))
   (put 'mul-terms '(dence dence) 
        (lambda (L1 L2) (tag (mul-terms L1 L2))))
+  (put 'minus-terms '(dence)
+       (lambda (term-list) (tag (minus-terms term-list))))
   (put 'raise 'dence
        (lambda (term-list)
          (attach-tag 'sparce (dence->sparce term-list))))
   '(done dence poly))
+
 
 (define (install-sparce-polynomial-package)
   (define (make-poly-sparce variable term-list)
@@ -92,6 +97,9 @@
                                    (add (coeff t1) (coeff t2)))
                         (add-terms (rest-terms L1)
                                    (rest-terms L2)))))))))
+  (define (minus-terms L)
+    (map (lambda (t) (make-term (order t) (- (coeff t)))) 
+         L))
   
   (define (mul-terms L1 L2)
     (if (empty-termlist? L1)
@@ -126,7 +134,10 @@
        (lambda (L1 L2) (tag (add-terms L1 L2))))
   (put 'mul-terms '(sparce sparce) 
        (lambda (L1 L2) (tag (mul-terms L1 L2))))
+  (put 'minus-terms '(sparce)
+       (lambda (term-list) (tag (minus-terms term-list))))
   '(done sparce poly))
+
 
 (define (install-polynomial-package)
   
@@ -162,12 +173,13 @@
                (list p1 p2))))
   (define (minus-poly p)
     (make-poly (variable p)
-               (map (lambda (t) (make-term (order t)
-                                           (minus (coeff t))))
-                    (term-list p))))
+               (minus-terms (term-list p))))
   
   (define (add-terms L1 L2)
     (apply-generic 'add-terms L1 L2))
+  
+  (define (minus-terms L)
+    (apply-generic 'minus-terms L))
   
   (define (mul-terms L1 L2)
     (apply-generic 'mul-terms L1 L2))
