@@ -3,9 +3,8 @@
   (define (square x) (* x x))
   (define (tag x) (attach-tag 'real x))
   (define (project x)
-    (let ((rat (real->rational x 0.001 0.001 #f)))
-    (make-rational (numerator rat) (denominator rat))))
-
+    (make-rational (floor->exact (* x 1000)) 1000))
+  
   (put 'add '(real real)
        (lambda (x y) (tag (+ x y))))
   (put 'sub '(real real)

@@ -1,4 +1,4 @@
-(define (install-dence-polynomial-package
+(define (install-dence-polynomial-package)
   
   (define (add-dence-terms L1 L2)
     (cond ((empty-termlist? L1) L2)
@@ -69,7 +69,7 @@
        (lambda (L1 L2) (tag (mul-dence-terms L1 L2))))
   (put 'minus-terms '(dence)
        (lambda (term-list) (tag (minus-dence-terms term-list))))
-  (put 'raise 'dence
+  (put 'raise-type 'dence
        (lambda (term-list)
          (attach-tag 'sparce (dence->sparce term-list))))
   '(done dence poly))
