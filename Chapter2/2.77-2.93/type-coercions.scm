@@ -33,16 +33,16 @@
 (define (raise-to obj type)
   (if (equal? (type-tag obj) type)
       obj
-      (raise-to (raise obj) type)))
+      (raise-to (raise-type obj) type)))
 
 (define (can-coerce? list)
   (let ((first-group (group (type-tag (car list)))))
-    (every (lambda (obj) 
-             (and (hash-table-exists? 
-                    type-hyerarchy-table 
+    (every (lambda (obj)
+             (and (hash-table-exists?
+                    type-hyerarchy-table
                     (type-tag obj))
                   (equal? (group (type-tag obj)) first-group)))
              list)))
 
 (define (can-raise? x)
-  (get 'raise (type-tag x)))
+  (get 'raise-type (type-tag x)))

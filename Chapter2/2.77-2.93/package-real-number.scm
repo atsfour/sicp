@@ -3,9 +3,8 @@
   (define (square x) (* x x))
   (define (tag x) (attach-tag 'real x))
   (define (project x)
-    (if (exact? x)
-        (make-rational (numerator x) (denominator x))
-        (make-rational 1 1)))
+    (let ((rat (real->rational x 0.001 0.001 #f)))
+    (make-rational (numerator rat) (denominator rat))))
 
   (put 'add '(real real)
        (lambda (x y) (tag (+ x y))))
@@ -19,7 +18,7 @@
   (put 'my-equ? '(real real) =)
   (put '=zero? '(real)
        (lambda (x) (= x 0)))
-  (put 'raise 'real
+  (put 'raise-type 'real
        (lambda (x) (make-complex-from-real-imag x 0)))
   (put 'project 'real project)
   (put 'generic-square '(real) (lambda (x) (tag (square x))))
