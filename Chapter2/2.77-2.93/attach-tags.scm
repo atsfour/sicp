@@ -1,6 +1,6 @@
 ;Exercise 2.78
 (define (attach-tag type-tag contents)
-  (if (equal? type-tag 'scheme-number)
+  (if (equal? type-tag 'integer)
       contents
       (cons type-tag contents)))
 (define (type-tag datum)

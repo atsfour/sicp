@@ -2,21 +2,32 @@
 ;Exercise 2.84
 (define type-hyerarchy-table
   (hash-table 'equal?
-              '(integer . 1)
-              '(rational . 2)
-              '(real . 3)
-              '(complex . 4)))
+              '(integer number . 1)
+              '(rational number . 2)
+              '(real number . 3)
+              '(complex number . 4)
+              '(dence poly-terms . 1)
+              '(sparce poly-terms . 2)))
+
+(define (group tag)
+  (if (hash-table-exists? type-hyerarchy-table tag)
+      (car (hash-table-get type-hyerarchy-table tag))
+      #f))
+
+(define (height tag)
+  (if (hash-table-exists? type-hyerarchy-table tag)
+      (cdr (hash-table-get type-hyerarchy-table tag))
+      #f))
 
 (define (highest-type args)
-  (define (highest-type-iter args height type)
+  (define (highest-type-iter args highest type)
     (if (null? args)
         type
         (let ((this-type (type-tag (car args))))
-          (let ((this-height
-                  (hash-table-get type-hyerarchy-table this-type 0)))
-            (if (> this-height height)
+          (let ((this-height (height this-type)))
+            (if (> this-height highest)
                 (highest-type-iter (cdr args) this-height this-type)
-                (highest-type-iter (cdr args) height type))))))
+                (highest-type-iter (cdr args) highest type))))))
   (highest-type-iter args 0 'miss))
 
 (define (raise-to obj type)
@@ -25,11 +36,13 @@
       (raise-to (raise obj) type)))
 
 (define (can-coerce? list)
-  (cond ((null? list) #t)
-        ((hash-table-exists? type-hyerarchy-table
-                             (type-tag (car list)))
-         (can-coerce? (cdr list)))
-        (else #f)))
+  (let ((first-group (group (type-tag (car list)))))
+    (every (lambda (obj) 
+             (and (hash-table-exists? 
+                    type-hyerarchy-table 
+                    (type-tag obj))
+                  (equal? (group (type-tag obj)) first-group)))
+             list)))
 
 (define (can-raise? x)
   (get 'raise (type-tag x)))

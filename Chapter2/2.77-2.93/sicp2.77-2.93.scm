@@ -1,4 +1,4 @@
-;install packages
+;;install packages
 
 (use file.util)
 (add-load-path "." :relative)
@@ -96,7 +96,6 @@
 
 ;Exercise 2.83
 (define (raise x)
-  (print 'raise x)
   (if (can-raise? x)
       ((get 'raise (type-tag x)) (contents x))
       #f))
@@ -109,7 +108,6 @@
         #f)))
 
 (define (drop x)
-  (print 'drop x)
   (let ((projected (project x)))
     (if projected
         (if (my-equ? x (raise projected))
