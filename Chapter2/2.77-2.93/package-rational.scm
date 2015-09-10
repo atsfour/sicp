@@ -30,7 +30,7 @@
     (and (= (numer x) (numer y))
          (= (denom x) (denom y))))
   (define (=zero? x) (= (numer x) 0))
-  (define (raise x) (make-real (/ (numer x) (denom x))))
+  (define (raise-rat x) (make-real (/ (numer x) (denom x))))
   (define (project x) (make-integer (floor (/ (numer x) (denom x)))))
 
   (define (tag x) (attach-tag 'rational x))
@@ -48,7 +48,7 @@
        (lambda (x) (tag (minus-rat x))))
   (put 'my-equ? '(rational rational) my-equ?)
   (put '=zero? '(rational) =zero?)
-  (put 'raise 'rational raise)
+  (put 'raise-type 'rational raise-rat)
   (put 'project 'rational project)
   (put 'make 'rational
        (lambda (n d) (tag (make-rat n d))))

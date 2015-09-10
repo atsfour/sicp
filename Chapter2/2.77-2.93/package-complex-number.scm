@@ -8,8 +8,8 @@
   (define (angle z)
     (generic-atan (div (imag-part z) (real-part z))))
   (define (make-from-mag-ang r a)
-    (generic-cons (mul r (generic-cos a)) (mul r (generic-sin a))))
-  
+    (cons (mul r (generic-cos a)) (mul r (generic-sin a))))
+
   (define this-type-tag 'rectangular)
   (define (tag x) (attach-tag this-type-tag x))
   (put 'real-part (list this-type-tag) real-part)
@@ -27,13 +27,13 @@
   (define (angle z) (cdr z))
   (define (make-from-mag-ang r a) (cons r a))
   (define (real-part z)
-    (mul (magnitude z) (cos (angle z))))
+    (mul (magnitude z) (generic-cos (angle z))))
   (define (imag-part z)
-    (mul (magnitude z) (sin (angle z))))
+    (mul (magnitude z) (generic-sin (angle z))))
   (define (make-from-real-imag x y)
     (cons (generic-sqrt (add (generic-square x) (generic-square y)))
           (generic-atan (div y x))))
-  
+
   (define this-type-tag 'polar)
   (define (tag x) (attach-tag this-type-tag x))
   (put 'real-part (list this-type-tag) real-part)
@@ -73,7 +73,7 @@
     (and (my-equ? (real-part z) 0) (= (imag-part z) 0)))
   (define (project z)
     (make-real (real-part z)))
-  
+
   (define (tag z) (attach-tag 'complex z))
   (put 'add '(complex complex)
        (lambda (z1 z2) (tag (add-complex z1 z2))))

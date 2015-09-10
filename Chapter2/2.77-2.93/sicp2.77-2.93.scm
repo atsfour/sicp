@@ -28,7 +28,7 @@
             '() ))))
   (define (try-raise op args)
     (if (every can-raise? args)
-        (let ((raised-args (map raise args)))
+        (let ((raised-args (map raise-type args)))
           (let ((ans (try-apply op raised-args)))
             (if (not (null? ans))
                 ans
@@ -45,7 +45,6 @@
                 (try-raise op raised-args))))
         '()))
   (define (result)
-    (print op args)
     (let ((res1 (try-apply op args)))
       (if (not (null? res1))
           res1
@@ -95,9 +94,9 @@
 (define (=zero? x) (apply-generic '=zero? x))
 
 ;Exercise 2.83
-(define (raise x)
+(define (raise-type x)
   (if (can-raise? x)
-      ((get 'raise (type-tag x)) (contents x))
+      ((get 'raise-type (type-tag x)) (contents x))
       #f))
 
 ;Exercise 2.85
@@ -110,7 +109,7 @@
 (define (drop x)
   (let ((projected (project x)))
     (if projected
-        (if (my-equ? x (raise projected))
+        (if (my-equ? x (raise-type projected))
             (drop projected)
             x)
         x)))
