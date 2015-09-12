@@ -45,6 +45,8 @@
 
 (test** (make-polynomial-dence 'x '(1 0 1 -2)) (add p1 p2))
 (test** (make-polynomial-dence 'x '(1 -1 0 -1 1)) (mul p1 p2))
+(test** (make-polynomial-sparce 'x '((6 3) (5 -1) (4 1) (3 -6) (2 1) (1 -1) (0 3)))
+        (mul p2 p3))
 (test** (list (make-polynomial-sparce 'x '((2 3) (1 2) (0 3)))
               (make-polynomial-sparce 'x '()))
         (div p3 p1))

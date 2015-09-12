@@ -4,20 +4,25 @@
     (cond ((empty-termlist? L1) L2)
           ((empty-termlist? L2) L1)
           (else
-            (let ((t1 (first-term L1))
-                  (t2 (first-term L2)))
-              (cond ((> (order t1) (order t2))
-                     (adjoin-term
-                       t1 (add-dence-terms (rest-terms L1) L2)))
-                    ((< (order t1) (order t2))
-                     (adjoin-term
-                       t2 (add-dence-terms L1 (rest-terms L2))))
-                    (else
-                      (adjoin-term
-                        (make-term (order t1)
-                                   (add (coeff t1) (coeff t2)))
-                        (add-dence-terms (rest-terms L1)
-                                         (rest-terms L2)))))))))
+            (let ((adjusuted-terms (adjusut-terms L1 L2)))
+              (let ((new-L1 (car adjusuted-terms))
+                    (new-L2 (cadr adjusuted-terms)))
+                (add-element-lists new-L1 new-L2))))))
+  (define (adjusut-terms L1 L2)
+    (let ((diff-length (- (length L1) (length L2))))
+      (if (= diff-length 0)
+          (list L1 L2)
+          (if (> diff-length 0)
+              (list L1 (append (make-list diff-length 0) L2))
+              (list (append (make-list (- diff-length) 0) L1) L2)))))
+  (define (add-element-lists L1 L2)
+    (define (iter acc L1 L2)
+      (cond ((and (null? L1) (null? L2) (reverse acc)))
+            ((null? L1) (iter (cons (car L2) acc) '() (cdr L2)))
+            ((null? L2) (iter (cons (car L1) acc) (cdr L1) '()))
+            (else (iter (cons (add (car L1) (car L2)) acc) (cdr L1) (cdr L2)))))
+    (iter '() L1 L2))
+  
   (define (minus-dence-terms L)
     (map (lambda (x) (- x)) L))
 
@@ -29,20 +34,8 @@
   (define (mul-term-by-all-terms t1 L)
     (if (empty-termlist? L)
         (the-empty-termlist)
-        (let ((t2 (first-term L)))
-          (adjoin-term
-            (make-term (+ (order t1) (order t2))
-                       (mul (coeff t1) (coeff t2)))
-            (mul-term-by-all-terms t1 (rest-terms L))))))
-
-  (define (adjoin-term term term-list)
-    (define (convert-nth n obj list)
-      (if (= n 0)
-          (cons obj (cdr list))
-          (cons (car list) (convert-nth (- n 1) obj (cdr list)))))
-    (if (null? term-list)
-        (cons (coeff term) (make-list (order term) 0))
-        (cons (coeff term) term-list)))
+        (map (lambda (x) (mul (coeff t1) x))
+             (append L (make-list (order t1) 0)))))
 
   (define (dence->sparce term-list)
     (define (iter order term-list)
