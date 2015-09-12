@@ -28,7 +28,7 @@
 (test** 4 (sub real1 (make-real 0.55)))
 (test** (make-complex-from-real-imag 4 2)
         (add cmpx1 int1))
-(test** (generic-sin 1) (imag-part cmpx3))
+(test** (make-real (sin 1)) (imag-part cmpx3))
 
 (test-section "type-tagging")
 (test** 'integer (type-tag 1))
@@ -40,9 +40,10 @@
 
 (test-section "polynomials")
 (define p1 (make-polynomial-dence 'x '(1 -1)))
-(define p2 (make-polynomial-dence 'x '(1 0 0 -1)))
+(define p2 (make-polynomial-dence 'x (list 1 0 0 (make-rational -1 1))))
 (define p3 (make-polynomial-sparce 'x '((3 3) (2 -1) (1 1) (0 -3))))
 
+(test** #t (polynomial? p1))
 (test** (make-polynomial-dence 'x '(1 0 1 -2)) (add p1 p2))
 (test** (make-polynomial-dence 'x '(1 -1 0 -1 1)) (mul p1 p2))
 (test** (make-polynomial-sparce 'x '((6 3) (5 -1) (4 1) (3 -6) (2 1) (1 -1) (0 3)))
@@ -50,5 +51,14 @@
 (test** (list (make-polynomial-sparce 'x '((2 3) (1 2) (0 3)))
               (make-polynomial-sparce 'x '()))
         (div p3 p1))
+
+(test-section "rational plynomials")
+(define p4 (make-polynomial-sparce 'x '((3 1) (0 1))))
+(define p5 (make-polynomial-sparce 'x '((2 1) (0 1))))
+(define rf (make-rational p4 p5))
+
+(test** (make-rational (make-polynomial-sparce 'x '((3 2) (0 2)))
+                       (make-polynomial-sparce 'x '((2 1) (0 1))))
+        (add rf rf))
 
 (test-end)

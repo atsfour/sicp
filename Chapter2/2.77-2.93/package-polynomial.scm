@@ -95,7 +95,6 @@
          L))
   
   (define (mul-sparce-terms L1 L2)
-
     (if (empty-termlist? L1)
         (the-empty-termlist)
         (add-sparce-terms (mul-term-by-all-terms (first-term L1) L2)
@@ -193,8 +192,7 @@
     (if (same-variable? (variable p1) (variable p2))
         (let ((result-term-lists
                 (div-terms (term-list p1) (term-list p2))))
-          (print "result-term-lists" result-term-lists)
-          (map (lambda (tl) (make-poly (variable p1) tl))
+          (map (lambda (t) (make-poly (variable p1) t))
                result-term-lists))
         (error "Polys not in same var: div-poly"
                (list p1 p2))))
@@ -251,3 +249,5 @@
   ((get 'make-poly-dence 'polynomial) var terms))
 (define (make-polynomial-sparce var terms)
   ((get 'make-poly-sparce 'polynomial) var terms))
+(define (polynomial? x)
+  (equal? (type-tag x) 'polynomial))
