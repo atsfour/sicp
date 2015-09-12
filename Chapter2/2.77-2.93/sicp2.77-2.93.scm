@@ -72,6 +72,8 @@
 
 (define (numer x) (apply-generic 'numer x))
 (define (denom x) (apply-generic 'denom x))
+(define (greatest-common-divisor x y)
+  (apply-generic 'gcd x y))
 
 ;complex package
 ;Exercise 2.77

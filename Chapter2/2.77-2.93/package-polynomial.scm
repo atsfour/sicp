@@ -24,8 +24,8 @@
     (iter '() L1 L2))
   
   (define (minus-dence-terms L)
-    (map (lambda (x) (- x)) L))
-
+    (map (lambda (x) (minus x)) L))
+  
   (define (mul-dence-terms L1 L2)
     (if (empty-termlist? L1)
         (the-empty-termlist)
@@ -36,7 +36,7 @@
         (the-empty-termlist)
         (map (lambda (x) (mul (coeff t1) x))
              (append L (make-list (order t1) 0)))))
-
+  
   (define (dence->sparce term-list)
     (define (iter order term-list)
       (cond ((null? term-list) '())
@@ -45,16 +45,16 @@
             (else (cons (list order (car term-list))
                         (iter (- order 1) (cdr term-list))))))
     (iter (- (length term-list) 1) term-list))
-
+  
   (define (the-empty-termlist) '())
   (define (first-term term-list) (list (- (length term-list) 1) (car term-list)))
   (define (rest-terms term-list) (cdr term-list))
   (define (empty-termlist? term-list) (null? term-list))
-
+  
   (define (make-term order coeff) (list order coeff))
   (define (order term) (car term))
   (define (coeff term) (cadr term))
-
+  
   (define (tag x) (attach-tag 'dence x))
   (put 'add-terms '(dence dence) 
        (lambda (L1 L2) (tag (add-dence-terms L1 L2))))
@@ -71,7 +71,7 @@
 (define (install-sparce-polynomial-package)
   (define (make-poly-sparce variable term-list)
     (cons variable term-list))
-
+  
   (define (add-sparce-terms L1 L2)
     (cond ((empty-termlist? L1) L2)
           ((empty-termlist? L2) L1)
@@ -91,7 +91,7 @@
                         (add-sparce-terms (rest-terms L1)
                                           (rest-terms L2)))))))))
   (define (minus-sparce-terms L)
-    (map (lambda (t) (make-term (order t) (- (coeff t)))) 
+    (map (lambda (t) (make-term (order t) (minus (coeff t)))) 
          L))
   
   (define (mul-sparce-terms L1 L2)
@@ -128,21 +128,29 @@
                     (list (adjoin-term (make-term new-o new-c)
                                        (car result))
                           (cadr result)))))))))
-
+  (define (remainder-sparce-terms L1 L2)
+    (cadr (div-sparce-terms L1 L2)))
+  (define (gcd-sparce-terms L1 L2)
+    (let ((rem (remainder-sparce-terms L1 L2)))
+      (if (empty-termlist? rem)
+          L2
+          (gcd-sparce-terms L2 rem))))
+  
   (define (adjoin-term term term-list)
     (if (=zero? (coeff term))
         term-list
         (cons term term-list)))
-
+  
   (define (the-empty-termlist) '())
   (define (first-term term-list) (car term-list))
   (define (rest-terms term-list) (cdr term-list))
-  (define (empty-termlist? term-list) (null? term-list))
-
+  (define (empty-termlist? term-list) 
+    (every (lambda (t) (my-equ? (coeff t) 0)) term-list))
+  
   (define (make-term order coeff) (list order coeff))
   (define (order term) (car term))
   (define (coeff term) (cadr term))
-
+  
   (define (tag x) (attach-tag 'sparce x))
   (put 'add-terms '(sparce sparce) 
        (lambda (L1 L2) (tag (add-sparce-terms L1 L2))))
@@ -150,26 +158,28 @@
        (lambda (L1 L2) (tag (mul-sparce-terms L1 L2))))
   (put 'div-terms '(sparce sparce) 
        (lambda (L1 L2) (map tag (div-sparce-terms L1 L2))))
+  (put 'gcd-terms '(sparce sparce)
+       (lambda (L1 L2) (tag (gcd-sparce-terms L1 L2))))
   (put 'minus-terms '(sparce)
        (lambda (term-list) (tag (minus-sparce-terms term-list))))
   '(done sparce poly))
 
 
 (define (install-polynomial-package)
-
+  
   (define (make-poly variable term-list)
     (cons variable term-list))
-
+  
   (define (variable p) (car p))
   (define (term-list p) (cdr p))
-
+  
   (define (variable p) (apply-generic 'variable p))
   (define (term-list p) (apply-generic 'term-list p))
-
+  
   (define (variable? x) (symbol? x))
   (define (same-variable? v1 v2)
     (and (variable? v1) (variable? v2) (equal? v1 v2)))
-
+  
   (define (add-poly p1 p2)
     (if (same-variable? (variable p1) (variable p2))
         (make-poly (variable p1)
@@ -179,7 +189,7 @@
                (list p1 p2))))
   (define (sub-poly p1 p2)
     (add-poly p1 (minus-poly p2)))
-
+  
   (define (mul-poly p1 p2)
     (if (same-variable? (variable p1) (variable p2))
         (make-poly (variable p1)
@@ -187,7 +197,7 @@
                               (term-list p2)))
         (error "Polys not in same var: mul-poly"
                (list p1 p2))))
-
+  
   (define (div-poly p1 p2)
     (if (same-variable? (variable p1) (variable p2))
         (let ((result-term-lists
@@ -196,23 +206,33 @@
                result-term-lists))
         (error "Polys not in same var: div-poly"
                (list p1 p2))))
-
+  
+  (define (gcd-poly p1 p2)
+    (if (same-variable? (variable p1) (variable p2))
+        (make-poly (variable p1)
+                   (gcd-terms (term-list p1) (term-list p2)))
+        (error "Polys not in same var: div-poly"
+               (list p1 p2))))
+  
   (define (minus-poly p)
     (make-poly (variable p)
                (minus-terms (term-list p))))
-
+  
   (define (add-terms L1 L2)
     (apply-generic 'add-terms L1 L2))
-
+  
   (define (minus-terms L)
     (apply-generic 'minus-terms L))
-
+  
   (define (mul-terms L1 L2)
     (apply-generic 'mul-terms L1 L2))
-
+  
   (define (div-terms L1 L2)
     (apply-generic 'div-terms L1 L2))
-
+  
+  (define (gcd-terms L1 L2)
+    (apply-generic 'gcd-terms L1 L2))
+  
   (define (poly=zero? p)
     (define (term-list=zero? term-list)
       (print "try" term-list)
@@ -221,7 +241,7 @@
              (term-list=zero? (cdr term-list)))
             (else #f)))
     (term-list=zero? (term-list p)))
-
+  
   (define (tag p) (attach-tag 'polynomial p))
   (put 'add '(polynomial polynomial)
        (lambda (p1 p2) (tag (add-poly p1 p2))))
@@ -231,6 +251,8 @@
        (lambda (p1 p2) (tag (sub-poly p1 p2))))
   (put 'div '(polynomial polynomial)
        (lambda (p1 p2) (map tag (div-poly p1 p2))))
+  (put 'gcd '(polynomial polynomial)
+       (lambda (p1 p2) (tag (gcd-poly p1 p2))))
   (put 'minus '(polynomial)
        (lambda (p) (tag (minus-poly p))))
   (put 'make-poly-dence 'polynomial
@@ -240,7 +262,7 @@
        (lambda (var terms)
          (tag (make-poly var (attach-tag 'sparce terms)))))
   (put '=zero? '(polynomial) poly=zero?)
-
+  
   (install-dence-polynomial-package)
   (install-sparce-polynomial-package)
   'done)
