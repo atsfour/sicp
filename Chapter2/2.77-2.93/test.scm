@@ -68,9 +68,9 @@
           (make-polynomial-sparce 'x '((3 1) (1 -1)))))
 
 (test-section "sicp-2.95")
-(define p6 (make-polynomial-dence 'x '(1 -2 1)))
-(define p7 (make-polynomial-dence 'x '(11 0 7)))
-(define p8 (make-polynomial-dence 'x '(13 5)))
+(define p6 (make-polynomial-sparce 'x '((2 1) (1 -2) (0 1))))
+(define p7 (make-polynomial-sparce 'x '((2 11) (0 7))))
+(define p8 (make-polynomial-sparce 'x '((1 13) (0 5))))
 
 (test** p6 (greatest-common-divisor (mul p6 p7)
                                     (mul p6 p8)))

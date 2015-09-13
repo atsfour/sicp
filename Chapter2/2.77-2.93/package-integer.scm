@@ -20,6 +20,8 @@
   (put 'my-equ? '(integer integer) =)
   (put '=zero? '(integer)
        (lambda (x) (= x 0)))
+  (put 'generic-square '(integer)
+       (lambda (x) (* x x)))
   (put 'raise-type 'integer
        (lambda (x) (make-rational x 1)))
   (put 'make 'integer identity)

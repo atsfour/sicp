@@ -128,12 +128,38 @@
                     (list (adjoin-term (make-term new-o new-c)
                                        (car result))
                           (cadr result)))))))))
+  
   (define (remainder-sparce-terms L1 L2)
     (cadr (div-sparce-terms L1 L2)))
+  
+  (define (pseudo-remainder-sparce-terms L1 L2)
+    (define (power int n)
+      (if (= n 0)
+          1
+          (* int (power int (- n 1)))))
+    (let ((integerizing-factor
+            (power (coeff (first-term L2))
+                   (+ 1 (order (first-term L1)) (minus (order (first-term L2)))))))
+      (let ((rem (cadr (div-sparce-terms 
+                         (mul-coeff-by-number L1 integerizing-factor)
+                         L2))))
+        (div-coeff-by-number rem (gcd-coeff rem)))))
+  
+  (define (gcd-coeff L)
+    (if (null? L)
+        0
+        (gcd (coeff (first-term L)) (gcd-coeff (cdr L)))))
+  (define (mul-coeff-by-number L num)
+    (map (lambda (t) (make-term (order t) (mul (coeff t) num))) L))
+  (define (div-coeff-by-number L num)
+    (map (lambda (t) (make-term (order t) (div (coeff t) num))) L))
+  
   (define (gcd-sparce-terms L1 L2)
-    (let ((rem (remainder-sparce-terms L1 L2)))
+    (let ((rem (pseudo-remainder-sparce-terms L1 L2)))
       (if (empty-termlist? rem)
-          L2
+          (if (< (coeff (first-term L2)) 0) 
+              (mul-coeff-by-number L2 -1)
+              L2)
           (gcd-sparce-terms L2 rem))))
   
   (define (adjoin-term term term-list)
