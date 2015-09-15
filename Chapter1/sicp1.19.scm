@@ -19,12 +19,12 @@
 (define (fib n)
     (define (fib-iter a b p q count)
     (print a " " b " " p " " q " " count)
-        (cond 
+        (cond
             ((= count 0)
                 b
             )
             ((even? count)
-                (fib-iter 
+                (fib-iter
                     a
                     b
                     (+ (* p p) (* q q))

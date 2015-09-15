@@ -39,7 +39,7 @@
          (cond ((positive? y) (make-interval p2 p3))
                ((negative? y) (make-interval p4 p1))
                (else (make-interval p2 p1))))
-        (else 
+        (else
         (cond ((positive? y) (make-interval p2 p4))
               ((negative? y) (make-interval p3 p1))
               (else (make-interval (min p2 p3) (max p1 p4)))))
@@ -65,7 +65,7 @@
 (define (approximate-mul-interval x y)
   (if (or (not (positive? x)) (not (positive? y)))
       (raise (condition (<error> (message "cannot use approximation if interval is not positive"))))
-      (make-center-percent 
+      (make-center-percent
         (* (center x) (center y))
         (+ (width-percent x) (width-percent y)))))
 

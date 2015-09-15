@@ -30,7 +30,7 @@
 ;Exercise 1.36
 (define (x-pow-x-is-n n)
     (fixed-point (lambda (x) (/ (log n) (log x))) 2.0))
-    
+
 
 (display (x-pow-x-is-n 1000))
 (newline)

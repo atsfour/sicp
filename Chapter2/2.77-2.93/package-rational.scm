@@ -32,7 +32,7 @@
     (and (my-equ? (numer x) (numer y))
          (my-equ? (denom x) (denom y))))
   (define (=zero? x) (my-equ? (numer x) 0))
-  (define (raise-rat x) 
+  (define (raise-rat x)
     (if (and (equal? (type-tag (numer x)) 'integer)
              (equal? (type-tag (denom x)) 'integer))
         (make-real (/ (numer x) (denom x)))
@@ -42,7 +42,7 @@
              (equal? (type-tag (denom x)) 'integer))
         (make-integer (floor (/ (numer x) (denom x))))
         #f))
-  
+
   (define (tag x) (attach-tag 'rational x))
   (put 'numer '(rational) numer)
   (put 'denom '(rational) denom)

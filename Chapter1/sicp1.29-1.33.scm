@@ -41,8 +41,8 @@
     (define dx (/ (- b a) n))
     (define (add-2dx x)
         (+ x (* 2 dx)))
-    (define (term x) 
-        (+ (f x) 
+    (define (term x)
+        (+ (f x)
            (* 4 (f (+ x dx)))
            (f (+ x (* 2 dx))))
         )
@@ -127,9 +127,9 @@
                          inc
                          b
                          prime?))
-                         
+
 (define (prod-disjoint-n n)
-    (define (disjoint-n? a) 
+    (define (disjoint-n? a)
         (= 1 (GCD a n)))
     (filtered-accumulate *
                          1
@@ -138,7 +138,7 @@
                          inc
                          (- n 1)
                          disjoint-n?))
-                         
+
 
 (define a 3)
 (define b 27)

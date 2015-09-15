@@ -4,7 +4,7 @@
   (define (tag x) (attach-tag 'real x))
   (define (project x)
     (make-rational (floor->exact (* x 1000)) 1000))
-  
+
   (put 'add '(real real)
        (lambda (x y) (tag (+ x y))))
   (put 'sub '(real real)

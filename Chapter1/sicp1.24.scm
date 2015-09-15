@@ -58,11 +58,11 @@
 (define (search-for-primes lower-bound upper-bound num-primes)
     (cond ((= num-primes 0) #t)
           ((> lower-bound upper-bound) #f)
-          ((prime? lower-bound) 
-            (begin (print lower-bound) 
-                   (search-for-primes 
+          ((prime? lower-bound)
+            (begin (print lower-bound)
+                   (search-for-primes
                      (+ lower-bound 2) upper-bound (- num-primes 1))))
-          (else 
+          (else
             (search-for-primes (+ lower-bound 2) upper-bound num-primes))
     )
 )
