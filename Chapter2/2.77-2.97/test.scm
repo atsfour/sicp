@@ -1,8 +1,8 @@
 (use gauche.test)
 
-(test-start "sicp2.77-2.93")
+(test-start "sicp2.77-2.97")
 (add-load-path "." :relative)
-(load "sicp2.77-2.93.scm")
+(load "sicp2.77-2.97.scm")
 
 (define-syntax test**
   (syntax-rules ()
