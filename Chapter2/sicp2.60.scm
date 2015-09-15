@@ -3,7 +3,7 @@
         ((equal? x (car set)) #t)
         (else (element-of-set? x (cdr set)))))
 
-(define (adjoin-set x set)      
+(define (adjoin-set x set)
   (cons x set))
 
 (define (intersection-set set1 set2)

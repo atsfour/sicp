@@ -73,7 +73,7 @@
 
 ;samples
 (define sample-tree-1
-  (make-tree 7 
+  (make-tree 7
              (make-tree 3
                         (make-tree 1
                                    '()

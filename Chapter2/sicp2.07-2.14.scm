@@ -19,7 +19,7 @@
       (mul-interval
         x
         (make-interval (/ 1.0 (upper-bound y))
-                   (/ 1.0 (lower-bound y))))))
+                       (/ 1.0 (lower-bound y))))))
 
 ; Exercise 2.11
 (define (positive? x) (> (lower-bound x) 0))
@@ -31,19 +31,19 @@
         (p2 (* (lower-bound x) (upper-bound y)))
         (p3 (* (upper-bound x) (lower-bound y)))
         (p4 (* (upper-bound x) (upper-bound y))))
-  (cond ((positive? x)
-         (cond ((positive? y) (make-interval p1 p4))
-               ((negative? y) (make-interval p3 p2))
-               (else (make-interval p3 p4))))
-        ((negative? x)
-         (cond ((positive? y) (make-interval p2 p3))
-               ((negative? y) (make-interval p4 p1))
-               (else (make-interval p2 p1))))
-        (else 
-        (cond ((positive? y) (make-interval p2 p4))
-              ((negative? y) (make-interval p3 p1))
-              (else (make-interval (min p2 p3) (max p1 p4)))))
-        )))
+    (cond ((positive? x)
+           (cond ((positive? y) (make-interval p1 p4))
+                 ((negative? y) (make-interval p3 p2))
+                 (else (make-interval p3 p4))))
+          ((negative? x)
+           (cond ((positive? y) (make-interval p2 p3))
+                 ((negative? y) (make-interval p4 p1))
+                 (else (make-interval p2 p1))))
+          (else
+            (cond ((positive? y) (make-interval p2 p4))
+                  ((negative? y) (make-interval p3 p1))
+                  (else (make-interval (min p2 p3) (max p1 p4)))))
+          )))
 
 ;Exercise 2.12
 (define (make-center-width c w)
@@ -65,7 +65,7 @@
 (define (approximate-mul-interval x y)
   (if (or (not (positive? x)) (not (positive? y)))
       (raise (condition (<error> (message "cannot use approximation if interval is not positive"))))
-      (make-center-percent 
+      (make-center-percent
         (* (center x) (center y))
         (+ (width-percent x) (width-percent y)))))
 

@@ -19,7 +19,7 @@
 (define (left-branch tree) (car tree))
 (define (right-branch tree) (cadr tree))
 
-(define (symbols tree) 
+(define (symbols tree)
   (if (leaf? tree)
       (list (symbol-leaf tree))
       (caddr tree)))
@@ -85,7 +85,7 @@
         ((eq? symbol (car symbol-list)) #t)
         (else (exists? symbol (cdr symbol-list)))))
 
-(define (encode-symbol symbol tree) 
+(define (encode-symbol symbol tree)
   (define (encode-iter symbol tree codelist)
     (if (leaf? tree)
         codelist

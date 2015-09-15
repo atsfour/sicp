@@ -67,7 +67,7 @@
 (define sample-mobile
   (make-mobile
     (make-branch 5 6)
-    (make-branch 3 (make-mobile 
+    (make-branch 3 (make-mobile
                      (make-branch 3 6)
                      (make-branch 3 (make-mobile
                                       (make-branch 1 3)

@@ -26,7 +26,7 @@
 
 ;Exercise 2.23
 (define (for-each-1 f items)
-  (if (null? items) 
+  (if (null? items)
       #f
       (and (f (car items))
            (for-each-1 f (cdr items)))))

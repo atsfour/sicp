@@ -35,7 +35,7 @@
 (define (make-rectangle corner1 corner2)
   ;input 2 point which make a diagonal line
   (define top-right
-    (make-point 
+    (make-point
       (max (x-point corner1) (x-point corner2))
       (max (y-point corner1) (y-point corner2))))
   (define bottom-left

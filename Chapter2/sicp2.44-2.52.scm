@@ -93,7 +93,7 @@
 ;frame-coord-map1
 (define (frame-coord-map1 frame)
   (lambda (v)
-    (add-vect 
+    (add-vect
       (origin-frame frame)
       (add-vect (scale-vect (xcor-vect v)
                             (edge1-frame frame))
@@ -169,7 +169,7 @@
 ;Exercise 2.49
 
 (define (frame-painter frame)
-  ((segments-to-painter 
+  ((segments-to-painter
      (list (make-segment (make-vect 0 0) (make-vect 0 1))
            (make-segment (make-vect 0 1) (make-vect 1 1))
            (make-segment (make-vect 1 1) (make-vect 1 0))
@@ -211,7 +211,7 @@
         (crotch (make-segment 0.5 0.3))
         (right-hand-top (make-segment 1.0 0.4))
         (right-hand-bottom (make-segment 1.0 0.3)))
-    (let ((body-lines 
+    (let ((body-lines
             (list (make-segment left-shoulder-top left-ear)
                   (make-segment left-ear left-head)
                   (make-segment left-shoulder-bottom left-hip)
@@ -328,7 +328,7 @@
                        identity)
        painter)))
 
-;exmaple 
+;exmaple
 (define v1 (make-vect 0.5 0.5))
 (define v2 (make-vect 0 0.7))
 (define v3 (make-vect 0.3 0))
