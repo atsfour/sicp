@@ -14,6 +14,8 @@
        (lambda (x y) (tag (* x y))))
   (put 'div '(integer integer)
        (lambda (x y) (make-rational x y)))
+  (put 'quatient '(integer integer)
+       (lambda (x y) (tag (floor->exact (/ x y)))))
   (put 'gcd '(integer integer)
        (lambda (x y) (tag (gcd x y))))
   (put 'minus '(integer) (lambda (x) (tag (- x))))

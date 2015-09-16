@@ -69,6 +69,7 @@
 (define (mul x y) (apply-generic 'mul x y))
 (define (div x y) (apply-generic 'div x y))
 (define (minus x) (apply-generic 'minus x))
+(define (quatient x y) (apply-generic 'quatient x y))
 
 (define (numer x) (apply-generic 'numer x))
 (define (denom x) (apply-generic 'denom x))

@@ -239,6 +239,8 @@
                    (gcd-terms (term-list p1) (term-list p2)))
         (error "Polys not in same var: div-poly"
                (list p1 p2))))
+  (define (quatient-poly p1 p2)
+    (car (div-poly p1 p2)))
 
   (define (minus-poly p)
     (make-poly (variable p)
@@ -279,6 +281,8 @@
        (lambda (p1 p2) (map tag (div-poly p1 p2))))
   (put 'gcd '(polynomial polynomial)
        (lambda (p1 p2) (tag (gcd-poly p1 p2))))
+  (put 'quatient '(polynomial polynomial)
+       (lambda (p1 p2) (tag (quatient-poly p1 p2))))
   (put 'minus '(polynomial)
        (lambda (p) (tag (minus-poly p))))
   (put 'make-poly-dence 'polynomial
